@@ -8,8 +8,11 @@ from selenium.webdriver.common.keys import Keys
 from urllib.request import *
 import time
 
-chrome_path = "chromedriver.exe"
-driver = webdriver.Chrome(chrome_path)
+chrome_driver_path = "chromedriver.exe"  
+browser_path = "C:\\Program Files (x86)\\BraveSoftware\\Brave-Browser\\Application\\brave.exe" 
+option = webdriver.ChromeOptions()
+option.binary_location = browser_path   
+driver = webdriver.Chrome(executable_path = chrome_driver_path, chrome_options = option)
 
 def is_valid(url):
     """

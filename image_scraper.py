@@ -8,8 +8,9 @@ from selenium.webdriver.common.keys import Keys
 from urllib.request import *
 import time
 
+count = 1
 chrome_driver_path = "chromedriver.exe"  
-browser_path = "C:\\Program Files (x86)\\BraveSoftware\\Brave-Browser\\Application\\brave.exe" 
+browser_path = "C:\\Users\\Devesh sangwan\\AppData\\Local\\BraveSoftware\\Brave-Browser\\Application\\brave.exe" 
 option = webdriver.ChromeOptions()
 option.binary_location = browser_path   
 driver = webdriver.Chrome(executable_path = chrome_driver_path, chrome_options = option)
@@ -30,8 +31,11 @@ def get_all_images(url):
     html = driver.page_source.split('"')
     urls = []
     for i in html:
-        if i.startswith('http') and i.split("'")[0].split('.')[-1] in extensions:
-            urls.append(i.split('"')[0])
+        if (i.startswith('http') or i.startswith('//')) and 'jpg' in i.split('.')[-1]:
+            if(i.startswith('http')):
+                urls.append(i.split('"')[0])
+            else:
+                urls.append('http:'+i.split('"')[0])
     print(urls)
     img_type = []   
     print ("Total images: {}\n".format(len(urls)))
@@ -39,6 +43,7 @@ def get_all_images(url):
 
 
 def download(url, pathname):
+    global count
     """
     Downloads a file given an URL and puts it in the folder `pathname`
     """
@@ -52,7 +57,7 @@ def download(url, pathname):
     file_size = int(response.headers.get("Content-Length", 0))
 
     # get the file name
-    filename = os.path.join(pathname, url.split("/")[-1])
+    filename = os.path.join(pathname, str(count)+".jpg")
 
     # progress bar, changing the unit to bytes instead of iteration (default by tqdm)
     progress = tqdm(response.iter_content(1024), f"Downloading {filename}", total=file_size, unit="B", unit_scale=True, unit_divisor=1024)
@@ -62,14 +67,15 @@ def download(url, pathname):
             f.write(data)
             # update the progress bar manually
             progress.update(len(data))
+    count += 1
 
 
 def main(url, path):
     # get all images
     driver.get(url)
-    for __ in range(10):
+    for __ in range(15):
         driver.execute_script("window.scrollBy(0, 1000000)")
-        time.sleep(0.2)
+        time.sleep(5.2)
     imgs = get_all_images(url)
     for img in imgs:
         # for each img, download it

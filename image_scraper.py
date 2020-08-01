@@ -31,7 +31,7 @@ def get_all_images(url):
     html = driver.page_source.split('"')
     urls = []
     for i in html:
-        if (i.startswith('http') or i.startswith('//')) and 'jpg' in i.split('.')[-1]:
+        if (i.startswith('http') or i.startswith('//')) and 'jpg' in i.split('.')[-1]:     #starting with http or // and ending with jpg (as a part)
             if(i.startswith('http')):
                 urls.append(i.split('"')[0])
             else:
@@ -73,7 +73,8 @@ def download(url, pathname):
 def main(url, path):
     # get all images
     driver.get(url)
-    for __ in range(15):
+    time.sleep(10)
+    for __ in range(40):
         driver.execute_script("window.scrollBy(0, 1000000)")
         time.sleep(5.2)
     imgs = get_all_images(url)

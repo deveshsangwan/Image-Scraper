@@ -16,37 +16,35 @@ option.binary_location = browser_path
 driver = webdriver.Chrome(executable_path = chrome_driver_path, chrome_options = option)
 
 def is_valid(url):
-    """
+    '''
     Checks whether `url` is a valid URL.
-    """
+    '''
     parsed = urlparse(url)
     return bool(parsed.netloc) and bool(parsed.scheme)
 
 
 def get_all_images(url):
-    """
+    '''
     Returns all image URLs on a single `url`
-    """
-    extensions = {"jpg", "jpeg", "png", "gif"}
+    '''
     html = driver.page_source.split('"')
     urls = []
     for i in html:
-        if (i.startswith('http') or i.startswith('//')) and 'jpg' in i.split('.')[-1]:     #starting with http or // and ending with jpg (as a part)
+        if (i.startswith('http') or i.startswith('//')) and 'jpg' in i.split('.')[-1]:    # starting with http or // and ending with jpg (as a part)
             if i.startswith('http'):
                 urls.append(i.split('"')[0])
             else:
                 urls.append('http:'+i.split('"')[0])
     print(urls)
-    img_type = []   
     print ("Total images: {}\n".format(len(urls)))
     return urls
 
 
 def download(url, pathname):
     global count
-    """
+    '''
     Downloads a file given an URL and puts it in the folder `pathname`
-    """
+    '''
     # if path doesn't exist, make that path dir
     if not os.path.isdir(pathname):
         os.makedirs(pathname)
